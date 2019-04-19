@@ -1,50 +1,46 @@
 # -*- coding: utf-8 -*-
-#===============================================================
-#   Copyright (xxx) 2019 All rights reserved.
-#
-#   @filename: fs_wrapper.py
-#   @author: xxx@xxx.com
-#   @date: 2019/02/13/ 11:47:02
-#   @brief:
-#
-#   @history:
-#
-#================================================================
 
 import sys
-import json
 import os
 import shutil
 import logging
 
 reload(sys)
-sys.setdefaultencoding( "utf-8" )
+sys.setdefaultencoding("utf-8")
 sys.path.append(os.getcwd())
 
 
 def exists(path):
     return os.path.exists(path)
 
+
 def is_file(path):
     return os.path.isfile(path)
+
 
 def is_dir(path):
     return os.path.isdir(path)
 
+
 def is_link(path):
     return os.path.islink(path)
+
 
 def normalize_path(path):
     return os.path.normpath(path)
 
+
 def full_norm_path(path):
     return normalize_path(os.path.abspath(path))
+
 
 def dir_path(path):
     return normalize_path(os.path.dirname(os.path.abspath(path)))
 
+
 def parent_dir(path):
     return normalize_path(os.path.dirname(os.path.abspath(path)) + "/..")
+
 
 def file_size(path, unit="B"):
     bytes_cnt = os.path.getsize(path)
@@ -62,6 +58,7 @@ def file_size(path, unit="B"):
         raise Exception("error unit [{}] for file_size".format(unit))
     return bytes_cnt
 
+
 def remove_file(*paths):
     for path in paths:
         if not exists(path):
@@ -75,6 +72,7 @@ def remove_file(*paths):
             return False
     return True
 
+
 def remove_dir(*paths):
     for path in paths:
         if not exists(path):
@@ -86,6 +84,7 @@ def remove_dir(*paths):
         if exists(path):
             return False
     return True
+
 
 def copy_file(*paths):
     """
@@ -107,6 +106,7 @@ def copy_file(*paths):
 
     return True
 
+
 def copy_dir(src, dest):
     """
     src and dest must be both directories and dest should not exist
@@ -117,6 +117,7 @@ def copy_dir(src, dest):
         logging.exception("exception occur when copy dir [%s]", src, exc_info=True)
         return False
     return True
+
 
 def move(*paths):
     """
@@ -146,6 +147,7 @@ def move(*paths):
                 return False
     return True
 
+
 def mkdir(*paths):
     for path in paths:
         if exists(path):
@@ -155,6 +157,7 @@ def mkdir(*paths):
         if not exists(path) or not is_dir(path):
             return False
     return True
+
 
 def md5sum(input_file, output_md5_file):
     if not os.path.exists(input_file):
@@ -182,6 +185,7 @@ def md5sum(input_file, output_md5_file):
         print >> fout, "{}  {}".format(md5_str, os.path.basename(input_file))
     return exists(output_md5_file)
 
+
 def is_same_md5(first_md5_file, second_md5_file):
     """compare md5 string
     """
@@ -192,6 +196,7 @@ def is_same_md5(first_md5_file, second_md5_file):
     except Exception:
         logging.exception("exception occur when compare md5", exc_info=True)
     return False
+
 
 def gzip_compress(dest_pack, *src_files, **kwargs):
     if len(src_files) == 0:
@@ -218,6 +223,7 @@ def gzip_compress(dest_pack, *src_files, **kwargs):
                 return False
     return exists(dest_pack)
 
+
 def gzip_decompress(src_pack, dest_dir, filter_indicator=None):
     import tarfile
     try:
@@ -232,6 +238,7 @@ def gzip_decompress(src_pack, dest_dir, filter_indicator=None):
         return False
     return True
 
+
 def touch(filename):
     dirname = dir_path(filename)
     print dirname
@@ -242,6 +249,5 @@ def touch(filename):
     return exists(filename)
 
 
-# python fs_wrapper.py
 if __name__ == "__main__":
     pass

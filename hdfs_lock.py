@@ -1,33 +1,21 @@
 # -*- coding: utf-8 -*-
-#===============================================================
-#   Copyright (xxx) 2019 All rights reserved.
-#
-#   @filename: hdfs_lock.py
-#   @author: xxx@xxx.com
-#   @date: 2019/02/13/ 11:25:37
-#   @brief:
-#
-#   @history:
-#
-#================================================================
 
 import sys
-import json
 import os
 import time
 import logging
+import hadoop_shell_wrapper as hadoop_shell
 
 reload(sys)
-sys.setdefaultencoding( "utf-8" )
+sys.setdefaultencoding("utf-8")
 sys.path.append(os.getcwd())
 
-from hadoop_shell_wrapper import HadoopShellWrapper
 
 class HdfsLock(object):
     def __init__(self, lock_file, attempt_interval, timeout):
         self._lock_file = lock_file
-        self._attempt_interval = max(attempt_interval, 1) # sec
-        self._timeout = timeout # sec
+        self._attempt_interval = max(attempt_interval, 1)  # sec
+        self._timeout = timeout  # sec
         self._acquired = False
 
     def acquire(self):
@@ -37,10 +25,10 @@ class HdfsLock(object):
         self._acquired = False
         begin = time.time()
         while time.time() - begin < self._timeout:
-            if HadoopShellWrapper.exists(self._lock_file):
+            if hadoop_shell.exists(self._lock_file):
                 logging.warning("hdfs lock occupied by others, wait...")
             else:
-                if HadoopShellWrapper.touchz(self._lock_file):
+                if hadoop_shell.touchz(self._lock_file):
                     logging.info("hdfs lock acquired")
                     self._acquired = True
                     return True
@@ -51,7 +39,7 @@ class HdfsLock(object):
 
     def release(self):
         if self._acquired:
-            self._acquired = not HadoopShellWrapper.rm(self._lock_file)
+            self._acquired = not hadoop_shell.rm(self._lock_file)
             return not self._acquired
         return True
 

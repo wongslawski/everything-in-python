@@ -1,24 +1,12 @@
 # -*- coding: utf-8 -*-
-#===============================================================
-#   Copyright (xxx) 2019 All rights reserved.
-#
-#   @filename: hadoop_shell_wrapper.py
-#   @author: xxx@xxx.com
-#   @date: 2019/01/30/ 11:23:11
-#   @brief:
-#
-#   @history:
-#
-#================================================================
 
 import sys
-import json
 import os
 import logging
 import subprocess
 
 reload(sys)
-sys.setdefaultencoding( "utf-8" )
+sys.setdefaultencoding("utf-8")
 sys.path.append(os.getcwd())
 
 
@@ -56,5 +44,5 @@ if __name__ == "__main__":
             level = logging.INFO,
             format = '[%(asctime)s - %(filename)s - %(levelname)s] %(message)s',
             datefmt = '%Y-%m-%d %H:%M:%S')
-    for x in ShellWrapper.shell_command_stdout(cmd="hadoop fs -ls /user/adst/wangshuan"):
+    for x in shell_command_stdout(cmd="hadoop fs -ls /user/adst/wangshuang"):
         print x

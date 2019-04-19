@@ -1,28 +1,15 @@
 # -*- coding: utf-8 -*-
-#===============================================================
-#   Copyright (xxx) 2019 All rights reserved.
-#
-#   @filename: hadoop_shell_wrapper.py
-#   @author: xxx@xxx.com
-#   @date: 2019/01/30/ 11:23:11
-#   @brief:
-#
-#   @history:
-#
-#================================================================
-
 import re
 import sys
-import json
 import os
 import logging
 from collections import namedtuple
+import shell_wrapper
 
 reload(sys)
-sys.setdefaultencoding( "utf-8" )
+sys.setdefaultencoding("utf-8")
 sys.path.append(os.getcwd())
 
-import shell_wrapper
 
 HADOOP_HOME = None
 if os.environ.get("HADOOP_HOME", "") != "":
@@ -30,11 +17,10 @@ if os.environ.get("HADOOP_HOME", "") != "":
 assert HADOOP_HOME, "error! HADOOP_HOME not set!"
 
 
-"""
-refers to http://hadoop.apache.org/docs/r1.0.4/cn/hdfs_shell.html
-"""
-
 def ls(*hdfs_paths, **kwargs):
+    """
+    refers to http://hadoop.apache.org/docs/r1.0.4/cn/hdfs_shell.html
+    """
     HadoopFile = namedtuple(
             "HadoopFile",
             ["name", "date", "time", "size", "is_file"])
@@ -83,6 +69,7 @@ def ls(*hdfs_paths, **kwargs):
         logging.exception("exception occur", exc_info=True)
     return None
 
+
 def exists(hdfs_path, **kwargs):
     try:
         cmd = '{}/bin/hadoop fs -test -e {}'.format(HADOOP_HOME, hdfs_path)
@@ -92,6 +79,7 @@ def exists(hdfs_path, **kwargs):
     except Exception as ex:
         logging.exception("exception occur", exc_info=True)
     return False
+
 
 def rm(*hdfs_paths, **kwargs):
     for hdfs_path in hdfs_paths:
@@ -103,6 +91,7 @@ def rm(*hdfs_paths, **kwargs):
         if not shell_wrapper.shell_command(cmd=cmd):
             return False
     return True
+
 
 def rmr(*hdfs_paths, **kwargs):
     for hdfs_path in hdfs_paths:
@@ -119,6 +108,7 @@ def rmr(*hdfs_paths, **kwargs):
             return False
     return True
 
+
 def touchz(*hdfs_files, **kwargs):
     for hdfs_file in hdfs_files:
         if exists(hdfs_file):
@@ -131,6 +121,7 @@ def touchz(*hdfs_files, **kwargs):
             return False
     return True
 
+
 def get(src, localdst, **kwargs):
     if not exists(src):
         logging.error("hdfs path [%s] not found, skip downloading.", src)
@@ -140,6 +131,7 @@ def get(src, localdst, **kwargs):
         logging.info(cmd)
     return shell_wrapper.shell_command(cmd=cmd)
 
+
 def getmerge(src, localdst, **kwargs):
     if not exists(src):
         logging.error("hdfs path [%s] not found, skip downloading.", src)
@@ -148,6 +140,7 @@ def getmerge(src, localdst, **kwargs):
     if kwargs.get("print_cmd", False):
         logging.info(cmd)
     return shell_wrapper.shell_command(cmd=cmd)
+
 
 def mkdir(*hdfs_paths, **kwargs):
     for hdfs_path in hdfs_paths:
@@ -161,6 +154,7 @@ def mkdir(*hdfs_paths, **kwargs):
             return False
     return True
 
+
 def put(*args, **kwargs):
     if len(args) < 2:
         raise Exception("error param for hadoop_put, at least src_path and dest_path")
@@ -168,6 +162,7 @@ def put(*args, **kwargs):
     if kwargs.get("print_cmd", False):
         logging.info(cmd)
     return shell_wrapper.shell_command(cmd=cmd)
+
 
 def stat(hdfs_path, **kwargs):
     HadoopFile = namedtuple(
@@ -192,6 +187,7 @@ def stat(hdfs_path, **kwargs):
             logging.exception("exception occur", exc_info=True)
     return None
 
+
 def mv(*args, **kwargs):
     if len(args) < 2:
         raise Exception("error param for hadoop_mv, at least src_path and dest_path")
@@ -207,6 +203,7 @@ def mv(*args, **kwargs):
             logging.error("destination [%s] needs to be an existing directory.", args[-1])
             return False
     return shell_wrapper.shell_command(cmd=cmd)
+
 
 def cp(*args, **kwargs):
     if len(args) < 2:
@@ -225,6 +222,7 @@ def cp(*args, **kwargs):
             logging.error("destination [%s] needs to be an existing directory.", args[-1])
             return False
     return shell_wrapper.shell_command(cmd=cmd)
+
 
 def dus(*args, **kwargs):
     HadoopFile = namedtuple(

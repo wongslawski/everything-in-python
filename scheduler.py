@@ -1,27 +1,13 @@
 # -*- coding: utf-8 -*-
-#===============================================================
-#   Copyright (xxx) 2019 All rights reserved.
-#
-#   @filename: scheduler.py
-#   @author: xxx@xxx.com
-#   @date: 2019/02/13/ 10:54:01
-#   @brief:
-#
-#   @history:
-#
-#================================================================
 
-import argparse
-import datetime
 import sys
 import time
 import os
 import threading
 import logging
-import random
 from collections import namedtuple
 reload(sys)
-sys.setdefaultencoding( "utf-8" )
+sys.setdefaultencoding("utf-8")
 sys.path.append(os.getcwd())
 
 LOG_KEY = "scheduler"
@@ -44,6 +30,7 @@ class Task(object):
         self.following_cids = set()
         self.status = TASK_STATUS_UNKNOWN
 
+
 class TaskRecorder(object):
     def __init__(self):
         self.pool = []
@@ -62,6 +49,7 @@ class TaskRecorder(object):
 
     def sort(self):
         self.pool.sort(key=lambda x:x.start_time)
+
 
 class TopologyQueue(object):
     def __init__(self):
@@ -93,7 +81,6 @@ class TopologyQueue(object):
         return False
 
     def sort(self):
-        self.finish_counter = 0
         if self.is_acyclic():
             raise Exception("error!!! acyclic task!!!")
         self.queue = []
@@ -222,7 +209,7 @@ class TaskRunner(threading.Thread):
                 if task.crucial:
                     logging.error("fail to complete crucial job [%s] [%s]", task.cid, task.cmd)
                 else:
-                    loggging.warning("fail to complete negligible job [%s] [%s]", task.cid, task.cmd)
+                    logging.warning("fail to complete negligible job [%s] [%s]", task.cid, task.cmd)
 
             end_ts = get_current_timestring()
             if self.task_recorder is not None:

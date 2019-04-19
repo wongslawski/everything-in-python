@@ -1,33 +1,22 @@
 # -*- coding: utf-8 -*-
-#===============================================================
-#   Copyright (xxx) 2019 All rights reserved.
-#
-#   @filename: hadoop_streaming_wrapper.py
-#   @author: xxx@xxx.com
-#   @date: 2019/01/30/ 11:23:23
-#   @brief:
-#
-#   @history:
-#
-#================================================================
 
 import sys
-import json
 import os
 import logging
+import shell_wrapper
+import glob
 
 reload(sys)
-sys.setdefaultencoding( "utf-8" )
+sys.setdefaultencoding("utf-8")
 sys.path.append(os.getcwd())
 
-import shell_wrapper
 
 HADOOP_HOME = None
 if os.environ.get("HADOOP_HOME", "") != "":
     HADOOP_HOME = os.environ["HADOOP_HOME"].strip()
 assert HADOOP_HOME, "error! HADOOP_HOME not set!"
 
-import glob
+
 STREAMING_JAR = None
 jars = glob.glob("{}/share/hadoop/tools/lib/hadoop-streaming*.jar".format(HADOOP_HOME))
 if len(jars) > 0:
@@ -90,6 +79,8 @@ class HadoopStreamingWrapper(object):
             logging.info(cmd)
         return shell_wrapper.shell_command(cmd=cmd, print_info=True, print_error=True)
 
+
+HadoopStreaming = HadoopStreamingWrapper()
 
 # python hadoop_streaming_wrapper.py
 if __name__ == "__main__":

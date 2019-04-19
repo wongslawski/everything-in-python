@@ -1,26 +1,11 @@
 # -*- coding: utf-8 -*-
-#===============================================================
-#   Copyright (xxx) 2019 All rights reserved.
-#
-#   @filename: datetime_wrapper.py
-#   @author: xxx@xxx.com
-#   @date: 2019/02/15/ 17:48:56
-#   @brief:
-#
-#   @history:
-#
-#================================================================
 
 import sys
-import json
 import os
 from datetime import datetime, timedelta
-import time
-import re
-import math
 import logging
 reload(sys)
-sys.setdefaultencoding( "utf-8" )
+sys.setdefaultencoding("utf-8")
 sys.path.append(os.getcwd())
 
 """
@@ -179,6 +164,7 @@ def test():
     assert DateTime("2019-01-10-12").distance_by_hour("2019-01-10-10") == -2, "fail distance_by_hour"
 
     print >> sys.stdout, "all unittest passed"
+
 
 if __name__ == "__main__":
     test()

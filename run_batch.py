@@ -7,7 +7,6 @@ import sys
 import time
 import os
 import threading
-sys.path.append('../')
 
 
 class CmdQueue(object):
